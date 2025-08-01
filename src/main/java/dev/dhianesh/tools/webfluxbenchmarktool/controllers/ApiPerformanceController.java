@@ -24,10 +24,10 @@ public class ApiPerformanceController {
 
     }
 
-    @PostMapping("/instant-result")
-    public Mono<InstantLoadTestResult> performInstantLoadTest(@RequestBody LoadTestRequest request)
-    {
-        return loadTestService.
-    }
+//    @PostMapping("/instant-result")
+//    public Mono<InstantLoadTestResult> performInstantLoadTest(@RequestBody LoadTestRequest request)
+//    {
+//        return loadTestService.runLoadTest(request);
+//    }
 
 }
