@@ -6,3 +6,8 @@ management:
   metrics:
     enable:
       webclient: true
+
+spring:
+  threads:
+    virtual:
+      enabled: true

@@ -1,6 +1,7 @@
 package dev.dhianesh.tools.webfluxbenchmarktool.controllers;
 
 import dev.dhianesh.tools.webfluxbenchmarktool.dtos.requests.LoadTestRequest;
+import dev.dhianesh.tools.webfluxbenchmarktool.dtos.responses.InstantLoadTestResult;
 import dev.dhianesh.tools.webfluxbenchmarktool.dtos.responses.LoadTestResult;
 import dev.dhianesh.tools.webfluxbenchmarktool.services.LoadTestService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class ApiPerformanceController {
     public Mono<LoadTestResult> startLoadTest(@RequestBody LoadTestRequest request) {
         return loadTestService.runLoadTest(request);
 
+    }
+
+    @PostMapping("/instant-result")
+    public Mono<InstantLoadTestResult> performInstantLoadTest(@RequestBody LoadTestRequest request)
+    {
+        return loadTestService.
     }
 
 }

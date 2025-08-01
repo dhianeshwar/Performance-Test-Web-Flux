@@ -39,9 +39,9 @@ public class RequestExecutor {
         }
 
         long startTime = System.currentTimeMillis();
-        log.info("before hitting : {}", url);
 
-        Mono<ClientResponse> responseMono = (body != null && method != HttpMethod.GET && method != HttpMethod.DELETE)
+
+        Mono<ClientResponse> responseMono = (body != null)
                 ? requestSpec.body(BodyInserters.fromValue(body)).exchangeToMono(Mono::just)
                 : requestSpec.exchangeToMono(Mono::just);
 
