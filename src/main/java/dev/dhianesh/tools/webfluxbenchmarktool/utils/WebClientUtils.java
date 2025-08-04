@@ -33,11 +33,13 @@ public class WebClientUtils {
                         conn.addHandlerLast(new ReadTimeoutHandler(readTimeout, TimeUnit.MILLISECONDS))
                                 .addHandlerLast(new WriteTimeoutHandler(writeTimeout, TimeUnit.MILLISECONDS))
                 );
-
-        return WebClient.builder()
+        WebClient build = WebClient.builder()
                 .baseUrl(url)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+
+
+        return build;
 
     }
 

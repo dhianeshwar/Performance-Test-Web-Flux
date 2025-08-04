@@ -61,7 +61,7 @@ public class WebClientConfig {
                 originalResponse.bodyToMono(String.class)
                         .defaultIfEmpty("")
                         .flatMap(body -> {
-                            log.info("⬅️ Response Status: {}", originalResponse.statusCode());
+//                            log.info("⬅️ Response Status: {}", originalResponse.statusCode());
                             log.info("⬅️ Response Body: {}", body);
 
                             // Create a new ClientResponse with same status, headers, and buffered body
