@@ -24,8 +24,8 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         ConnectionProvider connectionProvider = ConnectionProvider.builder("high-throughput-pool")
-                .maxConnections(500)
-                .pendingAcquireMaxCount(1000)
+                .maxConnections(2000)
+                .pendingAcquireMaxCount(2000)
                 .pendingAcquireTimeout(Duration.ofSeconds(30))
                 .maxIdleTime(Duration.ofSeconds(30))
                 .maxLifeTime(Duration.ofMinutes(5))

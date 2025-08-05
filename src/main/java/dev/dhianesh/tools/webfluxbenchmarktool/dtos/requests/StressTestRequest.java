@@ -7,6 +7,8 @@ public class StressTestRequest {
 
     private int totalRequests;
     private boolean continueOnTimeout;
+    private int batchSize;
+
 
     private WebClientRequest webClientRequest;
 }

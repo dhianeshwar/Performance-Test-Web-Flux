@@ -11,7 +11,11 @@ public class StressTestResponse {
 
     private int processedRequests;
     private double averageResponseTime;
-    private double totalDurationMinutes;
+    private long totalDurationMinutes;
+
+
+    private int totalFailure;
+    private int readTimeError;
     private List<Integer> errorOccurredAt;
 
 }
