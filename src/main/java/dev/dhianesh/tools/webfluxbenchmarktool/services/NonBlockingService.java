@@ -3,18 +3,16 @@ package dev.dhianesh.tools.webfluxbenchmarktool.services;
 import dev.dhianesh.tools.webfluxbenchmarktool.dtos.requests.StressTestRequest;
 import dev.dhianesh.tools.webfluxbenchmarktool.dtos.requests.WebClientRequest;
 import dev.dhianesh.tools.webfluxbenchmarktool.dtos.responses.StressTestResponse;
-import io.netty.handler.timeout.ReadTimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
@@ -48,11 +46,15 @@ public class NonBlockingService {
                                 .bodyValue(clientRequest.getRequestBody())
                                 .retrieve()
                                 .toBodilessEntity()
-                                .map(resp ->System.currentTimeMillis())
+                                .map(resp ->{
+                                    totalProcessedRequests.incrementAndGet();
+                                    return System.currentTimeMillis();
+                                })
                                 .onErrorResume(ex -> {
                                     uniqueErrors.add(ex.getMessage());
                                     log.error("error while calling the api", ex);
                                     totalProcessedRequests.decrementAndGet();
+                                    totalFailedRequests.incrementAndGet();
                                     return Mono.just(System.currentTimeMillis());
                                 } )
                 ,Math.min(totalRequest,batchSize))
@@ -64,6 +66,7 @@ public class NonBlockingService {
                     log.info("Unique errors : {}", uniqueErrors);
 
                     uniqueErrors.forEach(System.out::println);
+                    timeStamps.stream().map(TimeUnit.MILLISECONDS::toSeconds).forEach(System.out::println);
 
                     return StressTestResponse.builder()
                             .totalDurationMinutes(TimeUnit.MILLISECONDS.toMinutes(totalDurationInMinutes))
@@ -73,8 +76,6 @@ public class NonBlockingService {
                             .readTimeError(totalReadTimeOutExceptions.get())
                             .build();
                 });
-
-
     }
 
 }

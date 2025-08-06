@@ -51,7 +51,7 @@ public class WebClientConfig {
             log.info("➡️ Request: {} {}", clientRequest.method(), clientRequest.url());
             clientRequest.headers()
                     .forEach((name, values) -> values.forEach(value -> log.debug("{}: {}", name, value)));
-            return reactor.core.publisher.Mono.just(clientRequest);
+            return Mono.just(clientRequest);
         });
     }
 
