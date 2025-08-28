@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,8 +24,8 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         ConnectionProvider connectionProvider = ConnectionProvider.builder("high-throughput-pool")
-                .maxConnections(500)
-                .pendingAcquireMaxCount(1000)
+                .maxConnections(2000)
+                .pendingAcquireMaxCount(2000)
                 .pendingAcquireTimeout(Duration.ofSeconds(30))
                 .maxIdleTime(Duration.ofSeconds(30))
                 .maxLifeTime(Duration.ofMinutes(5))
@@ -35,8 +34,8 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create(connectionProvider)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .doOnConnected(conn -> conn
-                        .addHandlerLast(new ReadTimeoutHandler(10, TimeUnit.SECONDS))
-                        .addHandlerLast(new WriteTimeoutHandler(10, TimeUnit.SECONDS)))
+                        .addHandlerLast(new ReadTimeoutHandler(30, TimeUnit.SECONDS))
+                        .addHandlerLast(new WriteTimeoutHandler(30, TimeUnit.SECONDS)))
                 .compress(true)
                 .keepAlive(true);
 
@@ -52,7 +51,7 @@ public class WebClientConfig {
             log.info("➡️ Request: {} {}", clientRequest.method(), clientRequest.url());
             clientRequest.headers()
                     .forEach((name, values) -> values.forEach(value -> log.debug("{}: {}", name, value)));
-            return reactor.core.publisher.Mono.just(clientRequest);
+            return Mono.just(clientRequest);
         });
     }
 
@@ -61,7 +60,7 @@ public class WebClientConfig {
                 originalResponse.bodyToMono(String.class)
                         .defaultIfEmpty("")
                         .flatMap(body -> {
-                            log.info("⬅️ Response Status: {}", originalResponse.statusCode());
+//                            log.info("⬅️ Response Status: {}", originalResponse.statusCode());
                             log.info("⬅️ Response Body: {}", body);
 
                             // Create a new ClientResponse with same status, headers, and buffered body

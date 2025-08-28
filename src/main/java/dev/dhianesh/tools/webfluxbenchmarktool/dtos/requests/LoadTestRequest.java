@@ -14,4 +14,5 @@ public class LoadTestRequest {
     private Map<String, String> requestParams;
     private Map<String, String> headers;
     private String requestBody;
+
 }
