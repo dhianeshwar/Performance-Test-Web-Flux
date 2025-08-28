@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    enable:
+      webclient: true
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  shutdown: immediate
+
